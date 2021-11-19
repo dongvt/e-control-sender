@@ -1,61 +1,66 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, Text ,TextInput, View,Button } from "react-native";
+import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 
-import Socket from './app/socket/socket.js';
-
+import Socket from "./app/socket/socket.js";
 
 let socket = new Socket();
 
 export default function App() {
   const inputTextRef = useRef(null);
-  const [textContent,setTextContent] = useState('');
+  const [textContent, setTextContent] = useState("");
 
   let textInputFocusHandler = () => {
     inputTextRef.current.focus();
-  }
+  };
 
-  let textInputChangeHandler = (text) => {
-    setTextContent(text);
-    socket.type(text);
-    setTextContent('BUENO');
-  }
+  let textInputChangeHandler = ev => {
+    //setTextContent(key);
+    console.log(ev.nativeEvent);
+    socket.type(ev.nativeEvent.key);
+  };
 
-  let onTouchEvent = (ev) => {
-    console.log(
-      ev.nativeEvent
-      //`[${name}] ` +
-        // `root_x: ${ev.nativeEvent.pageX}, root_y: ${ev.nativeEvent.pageY} ` +
-        // `target_x: ${ev.nativeEvent.locationX}, target_y: ${ev.nativeEveZznt.locationY} ` //+
-       // `target: ${ev.nativeEvent.target}`
-    );
-  }
+  let onTouchEvent = ev => {
+    socket.move(ev.nativeEvent.locationX, ev.nativeEvent.locationY);
+  };
+
+  let onPressEvent = ev => {
+    socket.press();
+  };
+
+  let onReleaseEvent = ev => {
+    socket.pressRelease();
+  };
 
   return (
     <View style={styles.container}>
-      <View 
+      <View
         style={styles.touchSection}
-        onStartShouldSetResponder={(ev) => true}
-        onResponderMove={onTouchEvent}>
-      </View>
-    
-      <TextInput 
-        ref = {inputTextRef}
-        onChangeText={textInputChangeHandler}
-        value = {textContent}
+        onStartShouldSetResponder={ev => true}
+        onResponderMove={onTouchEvent}
+        onResponderGrant={onPressEvent}
+        onResponderRelease={onReleaseEvent}
       />
-      
-      <Button title='Che este s un boton' onPress={textInputFocusHandler}/>
+
+      <TextInput
+        ref={inputTextRef}
+        onKeyPress={textInputChangeHandler}
+        value={textContent}
+      />
+
+      <Button title="Che este s un boton" onPress={textInputFocusHandler} />
 
       <View
-          style={{
-            borderColor: "red",
-            borderWidth: 1,
-            padding: 16,
-            marginTop: 20
-          }}
-        >
-          <Text style={{ marginBottom: 8 }}>Show Typing Values:</Text>
-          <Text>{textContent}</Text>
+        style={{
+          borderColor: "red",
+          borderWidth: 1,
+          padding: 16,
+          marginTop: 20
+        }}
+      >
+        <Text>Show Typing Values:</Text>
+        <Text>
+          {textContent}
+        </Text>
       </View>
     </View>
   );
@@ -66,11 +71,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   touchSection: {
-    width: '100%',
-    height: '50%',
+    width: "100%",
+    height: "50%",
     borderColor: "green",
     borderWidth: 1,
     padding: 16,
