@@ -5,17 +5,17 @@ import Socket from "./app/socket/socket.js";
 
 let socket = new Socket();
 
-export default function App() {
-  const inputTextRef = useRef(null);
-  const [textContent, setTextContent] = useState("");
+//Timer for double click
+let lastPress = 0;
+const DOUBLE_PRESS_DELAY = 400;
 
+export default function App() {
+  const inputTextRef = useRef();
   let textInputFocusHandler = () => {
     inputTextRef.current.focus();
   };
 
   let textInputChangeHandler = ev => {
-    //setTextContent(key);
-    console.log(ev.nativeEvent);
     socket.type(ev.nativeEvent.key);
   };
 
@@ -27,41 +27,40 @@ export default function App() {
     socket.press();
   };
 
-  let onReleaseEvent = ev => {
+  let onReleaseEvent = () => {
     socket.pressRelease();
+  };
+
+  const onDoublePress = () => {
+    const time = new Date().getTime();
+    const delta = time - lastPress;
+
+    if (delta < DOUBLE_PRESS_DELAY) {
+      onPressEvent();
+    }
+    lastPress = time;
   };
 
   return (
     <View style={styles.container}>
       <View
         style={styles.touchSection}
-        onStartShouldSetResponder={ev => true}
+        onStartShouldSetResponder={ev => {
+          onDoublePress();
+          return true;
+        }}
         onResponderMove={onTouchEvent}
-        onResponderGrant={onPressEvent}
+        //onResponderGrant={onPressEvent}
         onResponderRelease={onReleaseEvent}
       />
 
       <TextInput
         ref={inputTextRef}
+        autoCapitalize={"none"}
         onKeyPress={textInputChangeHandler}
-        value={textContent}
       />
 
       <Button title="Che este s un boton" onPress={textInputFocusHandler} />
-
-      <View
-        style={{
-          borderColor: "red",
-          borderWidth: 1,
-          padding: 16,
-          marginTop: 20
-        }}
-      >
-        <Text>Show Typing Values:</Text>
-        <Text>
-          {textContent}
-        </Text>
-      </View>
     </View>
   );
 }
