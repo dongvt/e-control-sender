@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
+import { useRef } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/core";
 
 const SettingScreen = () => {
+  const navigation = useNavigation();
+  const [ipInputState, setIpInputState] = useState();
+  const [portInputState, setPortInputState] = useState();
+
+  const buttonPressHandler = () => {
+    navigation.navigate("Control", {
+      bueno: ipInputState
+    });
+  };
+  const ipChangeHandler = ev => {
+    setIpInputState(ev.nativeEvent.text);
+  };
+  const portChangeHandler = ev => {
+    setPortInputState(ev.nativeEvent.text);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.inputs}>
@@ -9,15 +27,23 @@ const SettingScreen = () => {
           style={styles.ipInput}
           placeholder="IP Address"
           placeholderTextColor="#666"
+          onChange={ipChangeHandler}
+          value={ipInputState}
         />
         <TextInput
           style={styles.portInput}
           placeholder="Port, Ex 3000"
           placeholderTextColor="#666"
+          onChange={portChangeHandler}
+          value={portInputState}
         />
       </View>
 
-      <Button style={styles.button} title="Connect" />
+      <Button
+        style={styles.button}
+        title="Connect"
+        onPress={buttonPressHandler}
+      />
     </View>
   );
 };

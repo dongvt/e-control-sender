@@ -1,16 +1,18 @@
 import React, { useRef } from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { useNavigation } from "@react-navigation/core";
 
 import Socket from "../../socket/socket.js";
-
-let socket = new Socket();
 
 //Timer for double click
 let lastPress = 0;
 const DOUBLE_PRESS_DELAY = 400;
 
-const ControlScreen = () => {
+const ControlScreen = props => {
+  console.log(props.route.params);
+  let socket = new Socket();
   const inputTextRef = useRef();
+  const navigation = useNavigation();
 
   let textInputFocusHandler = () => {
     inputTextRef.current.focus();
