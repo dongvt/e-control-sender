@@ -9,8 +9,9 @@ let lastPress = 0;
 const DOUBLE_PRESS_DELAY = 400;
 
 const ControlScreen = props => {
-  console.log(props.route.params);
-  let socket = new Socket();
+  const address = `http://${props.route.params.ip}:${props.route.params.port}`;
+
+  let socket = new Socket(address);
   const inputTextRef = useRef();
   const navigation = useNavigation();
 

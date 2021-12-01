@@ -10,7 +10,8 @@ const SettingScreen = () => {
 
   const buttonPressHandler = () => {
     navigation.navigate("Control", {
-      bueno: ipInputState
+      ip: ipInputState,
+      port: portInputState
     });
   };
   const ipChangeHandler = ev => {
