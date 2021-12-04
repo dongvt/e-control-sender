@@ -23,4 +23,8 @@ export default class Socket {
   pressRelease() {
     this.socket.emit("mousePress", false);
   }
+
+  scroll(direction) {
+    this.socket.emit("scroll", direction);
+  }
 }

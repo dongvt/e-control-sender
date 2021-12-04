@@ -30,6 +30,7 @@ const SettingScreen = () => {
           placeholderTextColor="#666"
           onChange={ipChangeHandler}
           value={ipInputState}
+          keyboardType= 'decimal-pad'
         />
         <TextInput
           style={styles.portInput}
@@ -37,6 +38,7 @@ const SettingScreen = () => {
           placeholderTextColor="#666"
           onChange={portChangeHandler}
           value={portInputState}
+          keyboardType= 'decimal-pad'
         />
       </View>
 
