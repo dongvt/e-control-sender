@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { StyleSheet, Text, TextInput, View, Button, Platform, ToastAndroid } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 
 import Socket from "../../socket/socket.js";
@@ -8,20 +8,39 @@ import Socket from "../../socket/socket.js";
 let lastPress = 0;
 const DOUBLE_PRESS_DELAY = 400;
 
+
+
 const ControlScreen = props => {
+  const navigation = useNavigation();
+
+  //Setting Validation
+  if(props.route.params === undefined || 
+    props.route.params.ip === undefined || 
+    props.route.params.port === undefined ||
+    props.route.params.port === '' ||
+    props.route.params.ip === ''){
+    if(Platform.OS !== 'ios') {
+      ToastAndroid.showWithGravity(
+        "Connection error: Verify IP and Port",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      )
+    }
+    navigation.navigate("Settings");
+  }
+
   const address = `http://${props.route.params.ip}:${props.route.params.port}`;
-  const [textValue, setTextValue] = useState("");
+  //const [textValue, setTextValue] = useState("");
 
   let socket = new Socket(address);
   const inputTextRef = useRef();
-  const navigation = useNavigation();
+  
 
   let textInputFocusHandler = () => {
     inputTextRef.current.focus();
   };
 
   let textInputChangeHandler = ev => {
-    //console.log(ev.nativeEvent);
     socket.type(ev.nativeEvent.key);
   };
 

@@ -20,10 +20,12 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.govert.econtrol",
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "versionCode": 1
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
